@@ -19,6 +19,13 @@ Thumbs.db
 # Archivos de configuración IDE
 .vscode/
 .idea/
+
+# Archivos de desarrollo temporal
+swagger-api/
+swagger-api.php
+test-*.php
+debug-*.php
+*-temp.php
 *.swp
 *.swo
 

@@ -48,6 +48,15 @@ switch (true) {
         Response::json($status);
         break;
         
+    // Test endpoint
+    case $path === 'test' && $method === 'GET':
+        Response::json([
+            'success' => true,
+            'message' => 'Test endpoint funcionando',
+            'data' => ['test' => true]
+        ]);
+        break;
+        
     // Autenticación
     case $path === 'auth/register' && $method === 'POST':
         require_once __DIR__ . '/routes/auth.php';

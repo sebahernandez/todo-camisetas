@@ -9,6 +9,7 @@ class Response {
      * Enviar respuesta de éxito
      */
     public static function success($data = null, $message = 'Operación exitosa', $code = 200) {
+        header('Content-Type: application/json; charset=utf-8');
         http_response_code($code);
         
         $response = [
@@ -28,6 +29,7 @@ class Response {
      * Enviar respuesta de error
      */
     public static function error($message = 'Error interno del servidor', $code = 500, $errors = null) {
+        header('Content-Type: application/json; charset=utf-8');
         http_response_code($code);
         
         $response = [
@@ -56,6 +58,7 @@ class Response {
      * Enviar respuesta JSON genérica
      */
     public static function json($data, $code = 200) {
+        header('Content-Type: application/json; charset=utf-8');
         http_response_code($code);
         echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         exit();

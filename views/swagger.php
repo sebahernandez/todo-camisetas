@@ -36,7 +36,7 @@
             "info": {
                 "title": "Todo Camisetas API",
                 "version": "1.0.0",
-                "description": "API REST para gestión de camisetas - Examen Transversal Final",
+                "description": "API REST para gestión de camisetas - Examen Transversal Final\n\n## 🔐 Autenticación\n\n### Pasos para autenticarte:\n\n1. **Haz clic en el botón 'Authorize' 🔒** (arriba a la derecha)\n2. **Registra un usuario** usando el endpoint `/auth/register` o usa las credenciales de prueba\n3. **Inicia sesión** usando el endpoint `/auth/login` para obtener tu token JWT\n4. **En el modal de autorización**, pega tu token en el campo 'Value' (sin agregar 'Bearer')\n5. **Haz clic en 'Authorize'** y luego 'Close'\n6. Ahora puedes usar todos los endpoints protegidos ✅\n\n## 🎯 Usuario Admin de Prueba\n\n- **Email:** `demo@swagger.com`\n- **Password:** `Demo123`\n- **Token directo:** `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6ImRlbW9Ac3dhZ2dlci5jb20iLCJyb2wiOiJhZG1pbiIsImV4cCI6MTc0OTY1OTUzMH0.XJW8-HOG-Lv4GHYaqnWNn5sbA65Xt6RubgJ2d12yDlk`\n\n## 📝 Notas Importantes\n\n- ✅ **Los endpoints GET** (listar) son públicos\n- 🔒 **Los endpoints POST, PUT, DELETE** requieren autenticación\n- 👮 **Solo los administradores** pueden crear/editar/eliminar recursos\n- ⏰ **El token de ejemplo expira en 24 horas**\n- 🔑 **Usa el botón 'Authorize' nativo** para mejor experiencia",
                 "contact": {
                     "name": "Estudiante",
                     "email": "estudiante@example.com"
@@ -44,7 +44,7 @@
             },
             "servers": [
                 {
-                    "url": "<?php echo 'http://' . $_SERVER['HTTP_HOST'] . str_replace('/swagger/', '', $_SERVER['REQUEST_URI']); ?>",
+                    "url": "<?php echo 'http://' . $_SERVER['HTTP_HOST'] . '/todo-camisetas/swagger-wrapper.php'; ?>",
                     "description": "Servidor de desarrollo"
                 }
             ],
@@ -128,7 +128,7 @@
                 }
             },
             "paths": {
-                "/api/auth/register": {
+                "/auth/register": {
                     "post": {
                         "tags": ["Autenticación"],
                         "summary": "Registrar nuevo usuario",
@@ -156,7 +156,7 @@
                         }
                     }
                 },
-                "/api/auth/login": {
+                "/auth/login": {
                     "post": {
                         "tags": ["Autenticación"],
                         "summary": "Iniciar sesión",
@@ -181,7 +181,7 @@
                         }
                     }
                 },
-                "/api/camisetas": {
+                "/camisetas": {
                     "get": {
                         "tags": ["Camisetas"],
                         "summary": "Listar camisetas",
@@ -230,7 +230,7 @@
                         }
                     }
                 },
-                "/api/camisetas/{id}": {
+                "/camisetas/{id}": {
                     "get": {
                         "tags": ["Camisetas"],
                         "summary": "Obtener camiseta por ID",
@@ -271,7 +271,7 @@
         };
 
         window.onload = function() {
-            SwaggerUIBundle({
+            const ui = SwaggerUIBundle({
                 url: null,
                 spec: swaggerSpec,
                 dom_id: '#swagger-ui',
@@ -283,7 +283,10 @@
                 plugins: [
                     SwaggerUIBundle.plugins.DownloadUrl
                 ],
-                layout: "StandaloneLayout"
+                layout: "StandaloneLayout",
+                onComplete: function() {
+                    console.log('Swagger UI cargado correctamente');
+                }
             });
         };
     </script>
