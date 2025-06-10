@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo Camisetas API - Pruebas</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background: #f5f5f5;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .test-section {
+        margin: 20px 0;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      .test-section h3 {
+        color: #333;
+        border-bottom: 2px solid #4caf50;
+        padding-bottom: 10px;
+      }
+      .btn {
+        padding: 10px 15px;
+        margin: 5px;
+        background: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .btn:hover {
+        background: #45a049;
+      }
+      .btn.secondary {
+        background: #2196f3;
+      }
+      .btn.danger {
+        background: #f44336;
+      }
+      .result {
+        margin-top: 10px;
+        padding: 10px;
+        background: #f9f9f9;
+        border-left: 4px solid #4caf50;
+        font-family: monospace;
+        white-space: pre-wrap;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+      .error {
+        border-left-color: #f44336;
+        background: #ffebee;
+      }
+      .input-group {
+        margin: 10px 0;
+      }
+      .input-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      .input-group input,
+      .input-group textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      .flex {
+        display: flex;
+        gap: 20px;
+      }
+      .flex > div {
+        flex: 1;
+      }
+      .status-indicator {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+      .status-success {
+        background: #4caf50;
+      }
+      .status-error {
+        background: #f44336;
+      }
+      .status-pending {
+        background: #ff9800;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎽 Todo Camisetas API - Panel de Pruebas</h1>
+      <p>Panel interactivo para probar la API REST de gestión de camisetas</p>
+
+      <!-- Status de la API -->
+      <div class="test-section">
+        <h3>📊 Estado de la API</h3>
+        <button class="btn" onclick="checkApiStatus()">Verificar Estado</button>
+        <button class="btn secondary" onclick="testDatabase()">
+          Probar Base de Datos
+        </button>
+        <div id="api-status-result" class="result" style="display: none"></div>
+      </div>
+
+      <div class="flex">
+        <!-- Autenticación -->
+        <div>
+          <div class="test-section">
+            <h3>🔐 Autenticación</h3>
+
+            <h4>Registro de Usuario</h4>
+            <div class="input-group">
+              <label>Email:</label>
+              <input
+                type="email"
+                id="register-email"
+                value="test@example.com"
+              />
+            </div>
+            <div class="input-group">
+              <label>Contraseña:</label>
+              <input type="password" id="register-password" value="Test123" />
+            </div>
+            <div class="input-group">
+              <label>Nombre:</label>
+              <input type="text" id="register-name" value="Usuario Test" />
+            </div>
+            <button class="btn" onclick="registerUser()">
+              Registrar Usuario
+            </button>
+
+            <h4>Login</h4>
+            <div class="input-group">
+              <label>Email:</label>
+              <input
+                type="email"
+                id="login-email"
+                value="admin@todocamisetas.com"
+              />
+            </div>
+            <div class="input-group">
+              <label>Contraseña:</label>
+              <input type="password" id="login-password" value="admin123" />
+            </div>
+            <button class="btn" onclick="loginUser()">Iniciar Sesión</button>
+
+            <div id="auth-result" class="result" style="display: none"></div>
+          </div>
+        </div>
+
+        <!-- Gestión de datos -->
+        <div>
+          <div class="test-section">
+            <h3>👕 Gestión de Camisetas</h3>
+            <button class="btn" onclick="getCamisetas()">
+              Listar Camisetas
+            </button>
+            <button class="btn secondary" onclick="getCamiseta(1)">
+              Obtener Camiseta #1
+            </button>
+            <button class="btn secondary" onclick="getCategorias()">
+              Listar Categorías
+            </button>
+            <button class="btn secondary" onclick="getMarcas()">
+              Listar Marcas
+            </button>
+            <div id="data-result" class="result" style="display: none"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Crear nueva camiseta -->
+      <div class="test-section">
+        <h3>➕ Crear Nueva Camiseta (Requiere autenticación de admin)</h3>
+        <div class="flex">
+          <div>
+            <div class="input-group">
+              <label>Nombre:</label>
+              <input
+                type="text"
+                id="camiseta-nombre"
+                value="Camiseta de Prueba"
+              />
+            </div>
+            <div class="input-group">
+              <label>Descripción:</label>
+              <textarea id="camiseta-descripcion">
+Camiseta creada desde el panel de pruebas</textarea
+              >
+            </div>
+            <div class="input-group">
+              <label>Precio:</label>
+              <input
+                type="number"
+                id="camiseta-precio"
+                value="25990"
+                step="0.01"
+              />
+            </div>
+          </div>
+          <div>
+            <div class="input-group">
+              <label>Talla:</label>
+              <select id="camiseta-talla">
+                <option value="XS">XS</option>
+                <option value="S">S</option>
+                <option value="M" selected>M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+                <option value="XXL">XXL</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label>Color:</label>
+              <input type="text" id="camiseta-color" value="Azul" />
+            </div>
+            <div class="input-group">
+              <label>Stock:</label>
+              <input type="number" id="camiseta-stock" value="10" />
+            </div>
+            <div class="input-group">
+              <label>Categoría ID:</label>
+              <input type="number" id="camiseta-categoria" value="1" />
+            </div>
+            <div class="input-group">
+              <label>Marca ID:</label>
+              <input type="number" id="camiseta-marca" value="1" />
+            </div>
+          </div>
+        </div>
+        <button class="btn" onclick="createCamiseta()">Crear Camiseta</button>
+        <div id="create-result" class="result" style="display: none"></div>
+      </div>
+
+      <!-- Token actual -->
+      <div class="test-section">
+        <h3>🔑 Token de Autenticación</h3>
+        <p>
+          Token actual:
+          <span
+            id="current-token"
+            style="font-family: monospace; word-break: break-all"
+            >No autenticado</span
+          >
+        </p>
+        <button class="btn danger" onclick="clearToken()">Limpiar Token</button>
+      </div>
+    </div>
+
+    <script>
+      let authToken = localStorage.getItem("api_token") || "";
+      updateTokenDisplay();
+
+      const API_BASE = "api.php?path=";
+
+      async function apiRequest(endpoint, options = {}) {
+        const url = API_BASE + endpoint;
+        const headers = {
+          "Content-Type": "application/json",
+          ...options.headers,
+        };
+
+        if (authToken) {
+          headers["Authorization"] = `Bearer ${authToken}`;
+        }
+
+        try {
+          const response = await fetch(url, {
+            ...options,
+            headers,
+          });
+
+          const data = await response.json();
+          return { data, status: response.status };
+        } catch (error) {
+          return { error: error.message, status: 0 };
+        }
+      }
+
+      function displayResult(elementId, result, isError = false) {
+        const element = document.getElementById(elementId);
+        element.style.display = "block";
+        element.className = "result" + (isError ? " error" : "");
+        element.textContent = JSON.stringify(result, null, 2);
+      }
+
+      function updateTokenDisplay() {
+        document.getElementById("current-token").textContent =
+          authToken || "No autenticado";
+      }
+
+      async function checkApiStatus() {
+        const result = await fetch("index.php");
+        const data = await result.json();
+        displayResult("api-status-result", data);
+      }
+
+      async function testDatabase() {
+        const result = await fetch("test_db.php");
+        const html = await result.text();
+        const element = document.getElementById("api-status-result");
+        element.style.display = "block";
+        element.innerHTML = html;
+      }
+
+      async function registerUser() {
+        const email = document.getElementById("register-email").value;
+        const password = document.getElementById("register-password").value;
+        const nombre = document.getElementById("register-name").value;
+
+        const result = await apiRequest("auth/register", {
+          method: "POST",
+          body: JSON.stringify({ email, password, nombre }),
+        });
+
+        displayResult("auth-result", result.data || result, result.error);
+      }
+
+      async function loginUser() {
+        const email = document.getElementById("login-email").value;
+        const password = document.getElementById("login-password").value;
+
+        const result = await apiRequest("auth/login", {
+          method: "POST",
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (result.data && result.data.success && result.data.data.token) {
+          authToken = result.data.data.token;
+          localStorage.setItem("api_token", authToken);
+          updateTokenDisplay();
+        }
+
+        displayResult("auth-result", result.data || result, result.error);
+      }
+
+      async function getCamisetas() {
+        const result = await apiRequest("camisetas");
+        displayResult("data-result", result.data || result, result.error);
+      }
+
+      async function getCamiseta(id) {
+        const result = await apiRequest(`camisetas/${id}`);
+        displayResult("data-result", result.data || result, result.error);
+      }
+
+      async function getCategorias() {
+        const result = await apiRequest("categorias");
+        displayResult("data-result", result.data || result, result.error);
+      }
+
+      async function getMarcas() {
+        const result = await apiRequest("marcas");
+        displayResult("data-result", result.data || result, result.error);
+      }
+
+      async function createCamiseta() {
+        const data = {
+          nombre: document.getElementById("camiseta-nombre").value,
+          descripcion: document.getElementById("camiseta-descripcion").value,
+          precio: parseFloat(document.getElementById("camiseta-precio").value),
+          talla: document.getElementById("camiseta-talla").value,
+          color: document.getElementById("camiseta-color").value,
+          stock: parseInt(document.getElementById("camiseta-stock").value),
+          categoria_id: parseInt(
+            document.getElementById("camiseta-categoria").value
+          ),
+          marca_id: parseInt(document.getElementById("camiseta-marca").value),
+        };
+
+        // Para crear camisetas, necesitamos usar FormData porque el endpoint espera multipart/form-data
+        const formData = new FormData();
+        Object.keys(data).forEach((key) => {
+          formData.append(key, data[key]);
+        });
+
+        const headers = {};
+        if (authToken) {
+          headers["Authorization"] = `Bearer ${authToken}`;
+        }
+
+        try {
+          const response = await fetch(API_BASE + "camisetas", {
+            method: "POST",
+            headers,
+            body: formData,
+          });
+
+          const result = await response.json();
+          displayResult("create-result", result, !result.success);
+        } catch (error) {
+          displayResult("create-result", { error: error.message }, true);
+        }
+      }
+
+      function clearToken() {
+        authToken = "";
+        localStorage.removeItem("api_token");
+        updateTokenDisplay();
+      }
+    </script>
+  </body>
+</html>

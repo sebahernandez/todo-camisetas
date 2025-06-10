@@ -1,0 +1,36 @@
+# Variables de entorno
+.env
+
+# Archivos subidos por usuarios
+uploads/*
+!uploads/.gitkeep
+
+# Logs del sistema
+*.log
+error.log
+access.log
+
+# Archivos temporales del sistema
+.DS_Store
+Thumbs.db
+.tmp/
+.cache/
+
+# Archivos de configuración IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos de backup
+*.bak
+*.backup
+*.old
+
+# Archivos de debug y test
+debug*.php
+test*.php
+*_test.php
+verify*.php
+check*.php
+health_check.php
