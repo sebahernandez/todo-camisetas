@@ -211,10 +211,28 @@ function handleUpdateMarca() {
             Response::error('ID de marca inválido', 400);
         }
         
-        $input = json_decode(file_get_contents('php://input'), true);
+        // Intentar obtener datos de diferentes fuentes (JSON o form-data)
+        $input = [];
         
-        if (!$input) {
-            Response::error('Datos JSON inválidos', 400);
+        // Opción 1: Intentar leer JSON del body
+        $jsonInput = json_decode(file_get_contents('php://input'), true);
+        if ($jsonInput) {
+            $input = $jsonInput;
+        }
+        // Opción 2: Si no hay JSON válido, intentar leer form-data
+        else if (!empty($_POST)) {
+            $input = $_POST;
+        }
+        // Opción 3: Si no hay datos, intentar leer PUT vars manualmente
+        else {
+            parse_str(file_get_contents("php://input"), $putVars);
+            if (!empty($putVars)) {
+                $input = $putVars;
+            }
+        }
+        
+        if (empty($input)) {
+            Response::error('No se recibieron datos para actualizar (soporta JSON o form-data)', 400);
         }
         
         $marcaModel = new Marca();

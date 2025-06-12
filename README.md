@@ -238,13 +238,21 @@ if (pm.response.code === 200) {
 - **Headers:**
   ```
   X-API-Token: {{token}}
-  Content-Type: application/x-www-form-urlencoded
+  Content-Type: application/x-www-form-urlencoded  # o application/json
   ```
 - **Body (x-www-form-urlencoded):**
   ```
   nombre: Camiseta Actualizada
   precio: 45990
   stock: 30
+  ```
+- **O Body (JSON):**
+  ```json
+  {
+    "nombre": "Camiseta Actualizada",
+    "precio": 45990,
+    "stock": 30
+  }
   ```
 
 #### 7. Eliminar Camiseta (Admin)
@@ -303,12 +311,19 @@ if (pm.response.code === 200) {
 - **Headers:**
   ```
   X-API-Token: {{token}}
-  Content-Type: application/x-www-form-urlencoded
+  Content-Type: application/x-www-form-urlencoded  # o application/json
   ```
-- **Body:**
+- **Body (x-www-form-urlencoded):**
   ```
   nombre: Categoría Actualizada
   descripcion: Nueva descripción
+  ```
+- **O Body (JSON):**
+  ```json
+  {
+    "nombre": "Categoría Actualizada",
+    "descripcion": "Nueva descripción"
+  }
   ```
 
 #### 11. Eliminar Categoría (Admin)
@@ -357,7 +372,29 @@ if (pm.response.code === 200) {
   descripcion: Descripción de la marca
   ```
 
-#### 13. Eliminar Marca (Admin)
+#### 13. Actualizar Marca (Admin)
+
+- **Method:** `PUT`
+- **URL:** `{{base_url}}?path=marcas/1`
+- **Headers:**
+  ```
+  X-API-Token: {{token}}
+  Content-Type: application/x-www-form-urlencoded  # o application/json
+  ```
+- **Body (x-www-form-urlencoded):**
+  ```
+  nombre: Marca Actualizada
+  descripcion: Nueva descripción de la marca
+  ```
+- **O Body (JSON):**
+  ```json
+  {
+    "nombre": "Marca Actualizada",
+    "descripcion": "Nueva descripción de la marca"
+  }
+  ```
+
+#### 14. Eliminar Marca (Admin)
 
 - **Method:** `DELETE`
 - **URL:** `{{base_url}}?path=marcas/1`
@@ -384,12 +421,12 @@ if (pm.response.code === 200) {
 
 ### ⚙️ Endpoints de Sistema
 
-#### 14. Estado de la API
+#### 15. Estado de la API
 
 - **Method:** `GET`
 - **URL:** `{{base_url}}?path=status`
 
-#### 15. Test Endpoint
+#### 16. Test Endpoint
 
 - **Method:** `GET`
 - **URL:** `{{base_url}}?path=test`
