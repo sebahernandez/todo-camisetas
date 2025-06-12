@@ -299,7 +299,7 @@ function handleDeleteCategoria() {
         
         $categoriaModel = new Categoria();
         
-        // Verificar que la categoría existe
+        // Verificar que la categoría existe y obtener sus datos antes de eliminar
         $categoria = $categoriaModel->findById($id);
         if (!$categoria) {
             Response::notFound('Categoría no encontrada');
@@ -312,7 +312,19 @@ function handleDeleteCategoria() {
             Response::error('Error al eliminar la categoría', 500);
         }
         
-        Response::noContent();
+        // Respuesta informativa con los datos de la categoría eliminada
+        Response::success(
+            [
+                'categoria_eliminada' => [
+                    'id' => $categoria['id'],
+                    'nombre' => $categoria['nombre'],
+                    'descripcion' => $categoria['descripcion'],
+                    'total_camisetas' => $categoria['total_camisetas'] ?? 0
+                ],
+                'timestamp' => date('Y-m-d H:i:s')
+            ],
+            "Categoría '{$categoria['nombre']}' eliminada exitosamente"
+        );
         
     } catch (Exception $e) {
         Response::error('Error al eliminar categoría: ' . $e->getMessage(), 400);

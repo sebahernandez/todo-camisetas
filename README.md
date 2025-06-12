@@ -252,6 +252,25 @@ if (pm.response.code === 200) {
   ```
   X-API-Token: {{token}}
   ```
+- **Response exitosa:**
+  ```json
+  {
+    "success": true,
+    "message": "Camiseta 'Camiseta Premium 2025' eliminada exitosamente",
+    "data": {
+      "camiseta_eliminada": {
+        "id": 13,
+        "nombre": "Camiseta Premium 2025",
+        "precio": "49990.00",
+        "talla": "L",
+        "color": "Negro",
+        "categoria_nombre": "Deportivas",
+        "marca_nombre": "Nike"
+      },
+      "timestamp": "2025-06-12 12:56:32"
+    }
+  }
+  ```
 
 ### 🏷️ Gestión de Categorías
 
@@ -289,6 +308,31 @@ if (pm.response.code === 200) {
   descripcion: Nueva descripción
   ```
 
+#### 11. Eliminar Categoría (Admin)
+
+- **Method:** `DELETE`
+- **URL:** `{{base_url}}?path=categorias/1`
+- **Headers:**
+  ```
+  X-API-Token: {{token}}
+  ```
+- **Response exitosa:**
+  ```json
+  {
+    "success": true,
+    "message": "Categoría 'Test Categoria' eliminada exitosamente",
+    "data": {
+      "categoria_eliminada": {
+        "id": 6,
+        "nombre": "Test Categoria",
+        "descripcion": "Categoria de prueba para eliminar",
+        "total_camisetas": 0
+      },
+      "timestamp": "2025-06-12 12:57:45"
+    }
+  }
+  ```
+
 ### 🏢 Gestión de Marcas
 
 #### 11. Listar Marcas
@@ -310,14 +354,39 @@ if (pm.response.code === 200) {
   descripcion: Descripción de la marca
   ```
 
+#### 13. Eliminar Marca (Admin)
+
+- **Method:** `DELETE`
+- **URL:** `{{base_url}}?path=marcas/1`
+- **Headers:**
+  ```
+  X-API-Token: {{token}}
+  ```
+- **Response exitosa:**
+  ```json
+  {
+    "success": true,
+    "message": "Marca 'Test Marca' eliminada exitosamente",
+    "data": {
+      "marca_eliminada": {
+        "id": 8,
+        "nombre": "Test Marca",
+        "descripcion": "Marca de prueba para eliminar",
+        "activo": 1
+      },
+      "timestamp": "2025-06-12 12:57:20"
+    }
+  }
+  ```
+
 ### ⚙️ Endpoints de Sistema
 
-#### 13. Estado de la API
+#### 14. Estado de la API
 
 - **Method:** `GET`
 - **URL:** `{{base_url}}?path=status`
 
-#### 14. Test Endpoint
+#### 15. Test Endpoint
 
 - **Method:** `GET`
 - **URL:** `{{base_url}}?path=test`

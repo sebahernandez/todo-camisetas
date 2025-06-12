@@ -403,7 +403,7 @@ function handleDeleteCamiseta() {
         
         $camisetaModel = new Camiseta();
         
-        // Verificar que la camiseta existe
+        // Verificar que la camiseta existe y obtener sus datos antes de eliminar
         $camiseta = $camisetaModel->findById($id);
         if (!$camiseta) {
             Response::notFound('Camiseta no encontrada');
@@ -416,7 +416,22 @@ function handleDeleteCamiseta() {
             Response::error('Error al eliminar la camiseta', 500);
         }
         
-        Response::noContent();
+        // Respuesta informativa con los datos de la camiseta eliminada
+        Response::success(
+            [
+                'camiseta_eliminada' => [
+                    'id' => $camiseta['id'],
+                    'nombre' => $camiseta['nombre'],
+                    'precio' => $camiseta['precio'],
+                    'talla' => $camiseta['talla'],
+                    'color' => $camiseta['color'],
+                    'categoria_nombre' => $camiseta['categoria_nombre'],
+                    'marca_nombre' => $camiseta['marca_nombre']
+                ],
+                'timestamp' => date('Y-m-d H:i:s')
+            ],
+            "Camiseta '{$camiseta['nombre']}' eliminada exitosamente"
+        );
         
     } catch (Exception $e) {
         Response::error('Error al eliminar camiseta: ' . $e->getMessage(), 500);

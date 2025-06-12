@@ -299,7 +299,7 @@ function handleDeleteMarca() {
         
         $marcaModel = new Marca();
         
-        // Verificar que la marca existe
+        // Verificar que la marca existe y obtener sus datos antes de eliminar
         $marca = $marcaModel->findById($id);
         if (!$marca) {
             Response::notFound('Marca no encontrada');
@@ -312,7 +312,19 @@ function handleDeleteMarca() {
             Response::error('Error al eliminar la marca', 500);
         }
         
-        Response::noContent();
+        // Respuesta informativa con los datos de la marca eliminada
+        Response::success(
+            [
+                'marca_eliminada' => [
+                    'id' => $marca['id'],
+                    'nombre' => $marca['nombre'],
+                    'descripcion' => $marca['descripcion'],
+                    'activo' => $marca['activo']
+                ],
+                'timestamp' => date('Y-m-d H:i:s')
+            ],
+            "Marca '{$marca['nombre']}' eliminada exitosamente"
+        );
         
     } catch (Exception $e) {
         Response::error('Error al eliminar marca: ' . $e->getMessage(), 400);

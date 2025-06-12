@@ -263,7 +263,41 @@
                 }
               ]
             }
-          }
+          },
+          "response": [
+            {
+              "name": "Camiseta eliminada exitosamente",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "X-API-Token",
+                    "value": "{{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}?path=camisetas/13",
+                  "host": ["{{base_url}}"],
+                  "query": [
+                    {
+                      "key": "path",
+                      "value": "camisetas/13"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Camiseta 'Camiseta Premium 2025' eliminada exitosamente\",\n    \"data\": {\n        \"camiseta_eliminada\": {\n            \"id\": 13,\n            \"nombre\": \"Camiseta Premium 2025\",\n            \"precio\": \"49990.00\",\n            \"talla\": \"L\",\n            \"color\": \"Negro\",\n            \"categoria_nombre\": \"Deportivas\",\n            \"marca_nombre\": \"Nike\"\n        },\n        \"timestamp\": \"2025-06-12 12:56:32\"\n    }\n}"
+            }
+          ]
         }
       ]
     },
@@ -322,6 +356,62 @@
               ]
             }
           }
+        },
+        {
+          "name": "Eliminar Categoría",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "X-API-Token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?path=categorias/1",
+              "host": ["{{base_url}}"],
+              "query": [
+                {
+                  "key": "path",
+                  "value": "categorias/1"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Categoría eliminada exitosamente",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "X-API-Token",
+                    "value": "{{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}?path=categorias/6",
+                  "host": ["{{base_url}}"],
+                  "query": [
+                    {
+                      "key": "path",
+                      "value": "categorias/6"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Categoría 'Test Categoria' eliminada exitosamente\",\n    \"data\": {\n        \"categoria_eliminada\": {\n            \"id\": 6,\n            \"nombre\": \"Test Categoria\",\n            \"descripcion\": \"Categoria de prueba para eliminar\",\n            \"total_camisetas\": 0\n        },\n        \"timestamp\": \"2025-06-12 12:57:45\"\n    }\n}"
+            }
+          ]
         }
       ]
     },
@@ -380,6 +470,62 @@
               ]
             }
           }
+        },
+        {
+          "name": "Eliminar Marca",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "X-API-Token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?path=marcas/1",
+              "host": ["{{base_url}}"],
+              "query": [
+                {
+                  "key": "path",
+                  "value": "marcas/1"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Marca eliminada exitosamente",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "X-API-Token",
+                    "value": "{{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}?path=marcas/8",
+                  "host": ["{{base_url}}"],
+                  "query": [
+                    {
+                      "key": "path",
+                      "value": "marcas/8"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Marca 'Test Marca' eliminada exitosamente\",\n    \"data\": {\n        \"marca_eliminada\": {\n            \"id\": 8,\n            \"nombre\": \"Test Marca\",\n            \"descripcion\": \"Marca de prueba para eliminar\",\n            \"activo\": 1\n        },\n        \"timestamp\": \"2025-06-12 12:57:20\"\n    }\n}"
+            }
+          ]
         }
       ]
     },
