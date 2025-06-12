@@ -36,7 +36,7 @@
             "info": {
                 "title": "Todo Camisetas API",
                 "version": "1.0.0",
-                "description": "API REST para gestión de camisetas - Examen Transversal Final\n\n## 🔐 Autenticación\n\n### Pasos para autenticarte:\n\n1. **Haz clic en el botón 'Authorize' 🔒** (arriba a la derecha)\n2. **Registra un usuario** usando el endpoint `/auth/register` o usa las credenciales de prueba\n3. **Inicia sesión** usando el endpoint `/auth/login` para obtener tu token JWT\n4. **En el modal de autorización**, pega tu token en el campo 'Value' (sin agregar 'Bearer')\n5. **Haz clic en 'Authorize'** y luego 'Close'\n6. Ahora puedes usar todos los endpoints protegidos ✅\n\n## 🎯 Usuario Admin de Prueba\n\n- **Email:** `demo@swagger.com`\n- **Password:** `Demo123`\n- **Token directo:** `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6ImRlbW9Ac3dhZ2dlci5jb20iLCJyb2wiOiJhZG1pbiIsImV4cCI6MTc0OTY1OTUzMH0.XJW8-HOG-Lv4GHYaqnWNn5sbA65Xt6RubgJ2d12yDlk`\n\n## 📝 Notas Importantes\n\n- ✅ **Los endpoints GET** (listar) son públicos\n- 🔒 **Los endpoints POST, PUT, DELETE** requieren autenticación\n- 👮 **Solo los administradores** pueden crear/editar/eliminar recursos\n- ⏰ **El token de ejemplo expira en 24 horas**\n- 🔑 **Usa el botón 'Authorize' nativo** para mejor experiencia",
+                "description": "API REST para gestión de camisetas - Examen Transversal Final\n\n## 🔐 Autenticación\n\n### Pasos para autenticarte:\n\n1. **Haz clic en el botón 'Authorize' 🔒** (arriba a la derecha)\n2. **Registra un usuario** usando el endpoint `/auth/register` o usa las credenciales de prueba\n3. **Inicia sesión** usando el endpoint `/auth/login` para obtener tu token JWT\n4. **En el modal de autorización**, pega tu token en el campo 'Value' (sin agregar 'Bearer')\n5. **Haz clic en 'Authorize'** y luego 'Close'\n6. Ahora puedes usar todos los endpoints protegidos ✅\n\n## ⚠️ Problema Común: Headers Authorization\n\n**Si tienes problemas con autenticación en MAMP/XAMPP:**\n\nEl header `Authorization: Bearer` puede no funcionar. **Usa alternativas:**\n\n### 🔧 Solución A: Header X-API-Token\n```bash\ncurl -H \"X-API-Token: tu_jwt_token\" ...\n```\n\n### 🔧 Solución B: Query Parameter\n```bash\ncurl \"...?token=tu_jwt_token\"\n```\n\n### 🔧 Solución C: JavaScript\n```javascript\nfetch(url, {\n  headers: { 'X-API-Token': token }\n})\n```\n\n## 🎯 Usuario Admin de Prueba\n\n- **Email:** `demo@swagger.com`\n- **Password:** `Demo123`\n- **Token directo:** `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6ImRlbW9Ac3dhZ2dlci5jb20iLCJyb2wiOiJhZG1pbiIsImV4cCI6MTc0OTY1OTUzMH0.XJW8-HOG-Lv4GHYaqnWNn5sbA65Xt6RubgJ2d12yDlk`\n\n## 📝 Notas Importantes\n\n- ✅ **Los endpoints GET** (listar) son públicos\n- 🔒 **Los endpoints POST, PUT, DELETE** requieren autenticación\n- 👮 **Solo los administradores** pueden crear/editar/eliminar recursos\n- ⏰ **El token de ejemplo expira en 24 horas**\n- 🔑 **Usa el botón 'Authorize' nativo** para mejor experiencia\n- 📋 **Ver SOLUCION_AUTH.md** para más detalles sobre autenticación",
                 "contact": {
                     "name": "Estudiante",
                     "email": "estudiante@example.com"
@@ -54,6 +54,12 @@
                         "type": "http",
                         "scheme": "bearer",
                         "bearerFormat": "JWT"
+                    },
+                    "apiKeyAuth": {
+                        "type": "apiKey",
+                        "in": "header",
+                        "name": "X-API-Token",
+                        "description": "Usar este header si Authorization: Bearer no funciona en MAMP/XAMPP"
                     }
                 },
                 "schemas": {
@@ -201,7 +207,7 @@
                     "post": {
                         "tags": ["Camisetas"],
                         "summary": "Crear nueva camiseta",
-                        "security": [{"bearerAuth": []}],
+                        "security": [{"bearerAuth": []}, {"apiKeyAuth": []}],
                         "requestBody": {
                             "required": true,
                             "content": {
@@ -245,7 +251,7 @@
                     "put": {
                         "tags": ["Camisetas"],
                         "summary": "Actualizar camiseta",
-                        "security": [{"bearerAuth": []}],
+                        "security": [{"bearerAuth": []}, {"apiKeyAuth": []}],
                         "parameters": [
                             {"name": "id", "in": "path", "required": true, "schema": {"type": "integer"}}
                         ],
@@ -257,7 +263,7 @@
                     "delete": {
                         "tags": ["Camisetas"],
                         "summary": "Eliminar camiseta",
-                        "security": [{"bearerAuth": []}],
+                        "security": [{"bearerAuth": []}, {"apiKeyAuth": []}],
                         "parameters": [
                             {"name": "id", "in": "path", "required": true, "schema": {"type": "integer"}}
                         ],

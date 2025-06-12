@@ -89,6 +89,16 @@ class JWT {
             }
         }
         
+        // Fallback: buscar token en query parameter (para debugging/testing)
+        if (isset($_GET['token'])) {
+            return $_GET['token'];
+        }
+        
+        // Fallback: buscar en X-API-Token header
+        if (isset($_SERVER['HTTP_X_API_TOKEN'])) {
+            return $_SERVER['HTTP_X_API_TOKEN'];
+        }
+        
         return null;
     }
     
@@ -98,16 +108,36 @@ class JWT {
     private static function getAuthorizationHeader() {
         $headers = null;
         
+        // Intento 1: $_SERVER directo
         if (isset($_SERVER['Authorization'])) {
             $headers = trim($_SERVER["Authorization"]);
-        } elseif (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+        } 
+        // Intento 2: HTTP_AUTHORIZATION
+        elseif (isset($_SERVER['HTTP_AUTHORIZATION'])) {
             $headers = trim($_SERVER["HTTP_AUTHORIZATION"]);
-        } elseif (function_exists('apache_request_headers')) {
+        }
+        // Intento 3: REDIRECT_HTTP_AUTHORIZATION (para algunos servidores Apache)
+        elseif (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+            $headers = trim($_SERVER['REDIRECT_HTTP_AUTHORIZATION']);
+        }
+        // Intento 4: apache_request_headers()
+        elseif (function_exists('apache_request_headers')) {
             $requestHeaders = apache_request_headers();
-            $requestHeaders = array_combine(array_map('ucwords', array_keys($requestHeaders)), array_values($requestHeaders));
             
-            if (isset($requestHeaders['Authorization'])) {
-                $headers = trim($requestHeaders['Authorization']);
+            // Buscar Authorization con diferentes casos
+            foreach (['Authorization', 'authorization', 'AUTHORIZATION'] as $key) {
+                if (isset($requestHeaders[$key])) {
+                    $headers = trim($requestHeaders[$key]);
+                    break;
+                }
+            }
+        }
+        
+        // Debug: Log todos los headers para diagnóstico
+        if (empty($headers) && defined('DEBUG_MODE') && DEBUG_MODE) {
+            error_log('JWT Debug - $_SERVER keys: ' . implode(', ', array_keys($_SERVER)));
+            if (function_exists('apache_request_headers')) {
+                error_log('JWT Debug - Apache headers: ' . json_encode(apache_request_headers()));
             }
         }
         

@@ -4,39 +4,404 @@
 
 ## 🚀 Inicio Rápido
 
-### Configuración Inicial
+### 📋 Requisitos
 
-1. **Configurar base de datos:** Importar `database/schema.sql`
-2. **Variables de entorno:** Copiar `.env.example` a `.env` y configurar
+- MAMP/XAMPP con PHP 7.4+
+- MySQL 5.7+
+- Puerto Apache: 8888 (MAMP default)
+
+### ⚡ Configuración (5 minutos)
+
+1. **Configurar base de datos:**
+
+   ```bash
+   # Importar en phpMyAdmin o MySQL:
+   database/schema.sql
+   ```
+
+2. **Variables de entorno:**
+
+   ```bash
+   cp .env.example .env
+   # Editar .env con tus credenciales de BD
+   ```
+
 3. **Iniciar MAMP:** Apache y MySQL
 
-### URLs de Acceso
+### 🌐 URLs de Acceso
 
-- **API:** http://localhost:8888/todo-camisetas/
-- **Swagger:** http://localhost:8888/todo-camisetas/views/swagger.php
-- **Pruebas:** http://localhost:8888/todo-camisetas/panel_pruebas.html
+- **API:** http://localhost:8888/todo-camisetas/api.php
+- **Swagger UI:** http://localhost:8888/todo-camisetas/swagger/
+- **Swagger Alternativa:** http://localhost:8888/todo-camisetas/swagger.php
+- **Panel de Pruebas:** http://localhost:8888/todo-camisetas/panel_pruebas.html
 
-### Credenciales de Prueba
+### 👤 Credenciales de Prueba
 
-- **Admin:** `demo@swagger.com` / `Demo123`
+**Admin preconfigurado:**
 
-## 📚 Documentación Completa
+- Email: `demo@swagger.com`
+- Password: `Demo123`
 
-- **[Instalación Detallada](documentation/INSTALACION.md)** - Guía paso a paso
-- **[Inicio Rápido](documentation/QUICK_START.md)** - Configuración en 5 minutos
-- **[Producción](documentation/PRODUCTION.md)** - Despliegue en servidor
-- **[Resumen del Proyecto](documentation/PROJECT_SUMMARY.md)** - Detalles técnicos
+## 🧪 Pruebas Rápidas
 
-## ✅ Estado
+### 1. Verificar Estado de la API
 
-**✅ PROYECTO COMPLETADO Y FUNCIONAL**
+```bash
+curl "http://localhost:8888/todo-camisetas/api.php?path=status"
+```
 
-- ✅ API REST completa (CRUD)
-- ✅ Autenticación JWT
+### 2. Login y Obtener Token
+
+```bash
+curl -X POST "http://localhost:8888/todo-camisetas/api.php?path=auth/login" \
+  -H "Content-Type: application/json" \
+  -d '{"email":"demo@swagger.com","password":"Demo123"}'
+```
+
+### 3. Listar Camisetas (público)
+
+```bash
+curl "http://localhost:8888/todo-camisetas/api.php?path=camisetas"
+```
+
+### 4. Crear Camiseta (requiere auth)
+
+```bash
+# Usar el token obtenido en paso 2
+curl -X POST "http://localhost:8888/todo-camisetas/api.php?path=camisetas" \
+  -H "X-API-Token: TU_JWT_TOKEN_AQUI" \
+  -F "nombre=Test Camiseta" \
+  -F "precio=29990" \
+  -F "talla=M" \
+  -F "categoria_id=1" \
+  -F "marca_id=1"
+```
+
+## 🔐 Autenticación
+
+### Problema Común en MAMP/XAMPP
+
+El header `Authorization: Bearer` puede no funcionar. **Solución:**
+
+**✅ Usar header alternativo:**
+
+```bash
+-H "X-API-Token: tu_jwt_token"
+```
+
+**✅ O query parameter:**
+
+```bash
+"?token=tu_jwt_token"
+```
+
+### Endpoints de Autenticación
+
+- `POST /auth/register` - Registrar usuario
+- `POST /auth/login` - Iniciar sesión
+- Solo usuarios `admin` pueden crear/editar/eliminar
+
+## 🗂️ Endpoints Principales
+
+### Públicos (GET)
+
+- `GET /camisetas` - Listar camisetas
+- `GET /camisetas/{id}` - Obtener camiseta por ID
+- `GET /categorias` - Listar categorías
+- `GET /marcas` - Listar marcas
+
+### Protegidos (requieren auth)
+
+- `POST /camisetas` - Crear camiseta (admin)
+- `PUT /camisetas/{id}` - Actualizar camiseta (admin)
+- `DELETE /camisetas/{id}` - Eliminar camiseta (admin)
+- Similar para categorías y marcas
+
+## 📋 Swagger UI
+
+**Documentación interactiva completa en:**
+http://localhost:8888/todo-camisetas/swagger/
+
+### Uso de Swagger:
+
+1. Haz clic en **"Authorize"** 🔒
+2. Inicia sesión con: `demo@swagger.com` / `Demo123`
+3. Pega el token JWT obtenido
+4. Prueba cualquier endpoint interactivamente
+
+## 📮 Guía Completa de Postman
+
+### 🔧 Configuración Inicial
+
+1. **Crear Environment "Todo Camisetas":**
+
+   - `base_url`: `http://localhost:8888/todo-camisetas/api.php`
+   - `token`: (se llenará automáticamente)
+
+2. **Script Post-Request para Login:**
+
+```javascript
+if (pm.response.code === 200) {
+  const response = pm.response.json();
+  if (response.success && response.data.token) {
+    pm.environment.set("token", response.data.token);
+  }
+}
+```
+
+### 🔐 Autenticación
+
+#### 1. Registrar Usuario
+
+- **Method:** `POST`
+- **URL:** `{{base_url}}?path=auth/register`
+- **Headers:**
+  ```
+  Content-Type: application/json
+  ```
+- **Body (JSON):**
+  ```json
+  {
+    "email": "nuevo@usuario.com",
+    "password": "Password123",
+    "nombre": "Usuario Nuevo",
+    "rol": "user"
+  }
+  ```
+
+#### 2. Iniciar Sesión
+
+- **Method:** `POST`
+- **URL:** `{{base_url}}?path=auth/login`
+- **Headers:**
+  ```
+  Content-Type: application/json
+  ```
+- **Body (JSON):**
+  ```json
+  {
+    "email": "demo@swagger.com",
+    "password": "Demo123"
+  }
+  ```
+
+### 👕 Gestión de Camisetas
+
+#### 3. Listar Camisetas (Público)
+
+- **Method:** `GET`
+- **URL:** `{{base_url}}?path=camisetas`
+- **Query Parameters (opcionales):**
+  ```
+  page: 1
+  limit: 10
+  search: nike
+  categoria_id: 1
+  marca_id: 1
+  talla: M
+  color: Negro
+  ```
+
+#### 4. Obtener Camiseta por ID
+
+- **Method:** `GET`
+- **URL:** `{{base_url}}?path=camisetas/1`
+
+#### 5. Crear Camiseta (Admin)
+
+- **Method:** `POST`
+- **URL:** `{{base_url}}?path=camisetas`
+- **Headers:**
+  ```
+  X-API-Token: {{token}}
+  ```
+- **Body (form-data):**
+  ```
+  nombre: Camiseta Nueva
+  descripcion: Descripción de la camiseta
+  precio: 39990
+  talla: L
+  color: Azul
+  stock: 25
+  categoria_id: 1
+  marca_id: 1
+  imagen: [archivo de imagen]
+  ```
+
+#### 6. Actualizar Camiseta (Admin)
+
+- **Method:** `PUT`
+- **URL:** `{{base_url}}?path=camisetas/1`
+- **Headers:**
+  ```
+  X-API-Token: {{token}}
+  Content-Type: application/x-www-form-urlencoded
+  ```
+- **Body (x-www-form-urlencoded):**
+  ```
+  nombre: Camiseta Actualizada
+  precio: 45990
+  stock: 30
+  ```
+
+#### 7. Eliminar Camiseta (Admin)
+
+- **Method:** `DELETE`
+- **URL:** `{{base_url}}?path=camisetas/1`
+- **Headers:**
+  ```
+  X-API-Token: {{token}}
+  ```
+
+### 🏷️ Gestión de Categorías
+
+#### 8. Listar Categorías
+
+- **Method:** `GET`
+- **URL:** `{{base_url}}?path=categorias`
+
+#### 9. Crear Categoría (Admin)
+
+- **Method:** `POST`
+- **URL:** `{{base_url}}?path=categorias`
+- **Headers:**
+  ```
+  X-API-Token: {{token}}
+  ```
+- **Body (form-data):**
+  ```
+  nombre: Nueva Categoría
+  descripcion: Descripción de la categoría
+  ```
+
+#### 10. Actualizar Categoría (Admin)
+
+- **Method:** `PUT`
+- **URL:** `{{base_url}}?path=categorias/1`
+- **Headers:**
+  ```
+  X-API-Token: {{token}}
+  Content-Type: application/x-www-form-urlencoded
+  ```
+- **Body:**
+  ```
+  nombre: Categoría Actualizada
+  descripcion: Nueva descripción
+  ```
+
+### 🏢 Gestión de Marcas
+
+#### 11. Listar Marcas
+
+- **Method:** `GET`
+- **URL:** `{{base_url}}?path=marcas`
+
+#### 12. Crear Marca (Admin)
+
+- **Method:** `POST`
+- **URL:** `{{base_url}}?path=marcas`
+- **Headers:**
+  ```
+  X-API-Token: {{token}}
+  ```
+- **Body (form-data):**
+  ```
+  nombre: Nueva Marca
+  descripcion: Descripción de la marca
+  ```
+
+### ⚙️ Endpoints de Sistema
+
+#### 13. Estado de la API
+
+- **Method:** `GET`
+- **URL:** `{{base_url}}?path=status`
+
+#### 14. Test Endpoint
+
+- **Method:** `GET`
+- **URL:** `{{base_url}}?path=test`
+
+### 🚨 Solución de Problemas en Postman
+
+#### Error "Token de acceso requerido"
+
+**Solución:** Usar header `X-API-Token` en lugar de `Authorization: Bearer`
+
+#### Error de validación
+
+**Verificar:** Content-Type correcto y campos requeridos
+
+#### Error 404
+
+**Verificar:** URL correcta con parámetro `path`
+
+### 💡 Tips para Postman
+
+1. **Usar Variables:** `{{base_url}}` y `{{token}}`
+2. **Scripts de Post-Request:** Para guardar tokens automáticamente
+3. **Tests:** Agregar validaciones de respuesta
+4. **Collections:** Organizar endpoints por funcionalidad
+5. **Environments:** Separar desarrollo, testing y producción
+
+### 📦 Archivos de Importación
+
+**Para importar rápidamente en Postman:**
+
+1. **Collection:** `postman_collection.json` - Todos los endpoints configurados
+2. **Environment:** `postman_environment.json` - Variables pre-configuradas
+
+**Pasos de importación:**
+
+1. Abrir Postman
+2. Import → Subir archivos `postman_collection.json` y `postman_environment.json`
+3. Seleccionar environment "Todo Camisetas Environment"
+4. Ejecutar "Iniciar Sesión" para obtener token automáticamente
+5. ¡Listo para usar todos los endpoints!
+
+## 🏗️ Estructura del Proyecto
+
+```
+todo-camisetas/
+├── api.php              # Router principal
+├── swagger.php          # Acceso a Swagger UI
+├── config/              # Configuración
+├── database/            # Schema SQL
+├── models/              # Modelos de datos
+├── routes/              # Definición de rutas
+├── middleware/          # Autenticación
+├── utils/              # Utilidades (JWT, validación)
+└── views/              # Swagger UI
+```
+
+## ✅ Estado del Proyecto
+
+**🎯 COMPLETADO Y FUNCIONAL**
+
+- ✅ API REST completa con CRUD
+- ✅ Autenticación JWT robusta
 - ✅ Swagger UI operativo
-- ✅ Base de datos configurada
-- ✅ Documentación completa
+- ✅ Base de datos con datos de prueba
+- ✅ Manejo de archivos/imágenes
+- ✅ Validación completa de datos
+- ✅ Paginación y filtros
+- ✅ Manejo de errores
+
+## 🐛 Solución de Problemas
+
+### Error "Token de acceso requerido"
+
+➡️ Usar `X-API-Token` en lugar de `Authorization: Bearer`
+
+### Error 500 en Swagger
+
+➡️ Swagger UI está en `/swagger/` (con slash final)
+
+### Base de datos no conecta
+
+➡️ Verificar credenciales en `.env`
 
 ---
 
-**🏆 Examen Transversal Final - PHP/MySQL**
+**🏆 Proyecto Final - Desarrollo Full Stack PHP/MySQL**  
+**Fecha:** Junio 2025

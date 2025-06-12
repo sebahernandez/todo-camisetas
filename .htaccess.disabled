@@ -1,0 +1,7 @@
+# Todo Camisetas API - Apache Configuration
+
+# Enable mod_rewrite
+RewriteEngine On
+
+# Redirect /swagger to swagger.php
+RewriteRule ^swagger/?$ swagger.php [L]

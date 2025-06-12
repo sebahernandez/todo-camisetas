@@ -1,0 +1,424 @@
+{
+  "info": {
+    "name": "Todo Camisetas API",
+    "description": "Colección completa de endpoints para la API Todo Camisetas",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8888/todo-camisetas/api.php",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🔐 Autenticación",
+      "item": [
+        {
+          "name": "Registrar Usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"nuevo@usuario.com\",\n  \"password\": \"Password123\",\n  \"nombre\": \"Usuario Nuevo\",\n  \"rol\": \"user\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}?path=auth/register",
+              "host": ["{{base_url}}"],
+              "query": [
+                {
+                  "key": "path",
+                  "value": "auth/register"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Iniciar Sesión",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.data.token) {",
+                  "        pm.environment.set(\"token\", response.data.token);",
+                  "        console.log(\"Token guardado:\", response.data.token);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"demo@swagger.com\",\n  \"password\": \"Demo123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}?path=auth/login",
+              "host": ["{{base_url}}"],
+              "query": [
+                {
+                  "key": "path",
+                  "value": "auth/login"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "👕 Camisetas",
+      "item": [
+        {
+          "name": "Listar Camisetas",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}?path=camisetas&page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "query": [
+                {
+                  "key": "path",
+                  "value": "camisetas"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtener Camiseta por ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}?path=camisetas/1",
+              "host": ["{{base_url}}"],
+              "query": [
+                {
+                  "key": "path",
+                  "value": "camisetas/1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear Camiseta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Token",
+                "value": "{{token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "nombre",
+                  "value": "Camiseta desde Postman",
+                  "type": "text"
+                },
+                {
+                  "key": "descripcion",
+                  "value": "Creada usando Postman Collection",
+                  "type": "text"
+                },
+                {
+                  "key": "precio",
+                  "value": "39990",
+                  "type": "text"
+                },
+                {
+                  "key": "talla",
+                  "value": "M",
+                  "type": "text"
+                },
+                {
+                  "key": "color",
+                  "value": "Azul",
+                  "type": "text"
+                },
+                {
+                  "key": "stock",
+                  "value": "15",
+                  "type": "text"
+                },
+                {
+                  "key": "categoria_id",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "marca_id",
+                  "value": "1",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}?path=camisetas",
+              "host": ["{{base_url}}"],
+              "query": [
+                {
+                  "key": "path",
+                  "value": "camisetas"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Camiseta",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "X-API-Token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "nombre",
+                  "value": "Camiseta Actualizada"
+                },
+                {
+                  "key": "precio",
+                  "value": "45990"
+                },
+                {
+                  "key": "stock",
+                  "value": "25"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}?path=camisetas/1",
+              "host": ["{{base_url}}"],
+              "query": [
+                {
+                  "key": "path",
+                  "value": "camisetas/1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Camiseta",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "X-API-Token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}?path=camisetas/1",
+              "host": ["{{base_url}}"],
+              "query": [
+                {
+                  "key": "path",
+                  "value": "camisetas/1"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏷️ Categorías",
+      "item": [
+        {
+          "name": "Listar Categorías",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}?path=categorias",
+              "host": ["{{base_url}}"],
+              "query": [
+                {
+                  "key": "path",
+                  "value": "categorias"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear Categoría",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Token",
+                "value": "{{token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "nombre",
+                  "value": "Nueva Categoría",
+                  "type": "text"
+                },
+                {
+                  "key": "descripcion",
+                  "value": "Descripción de la nueva categoría",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}?path=categorias",
+              "host": ["{{base_url}}"],
+              "query": [
+                {
+                  "key": "path",
+                  "value": "categorias"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏢 Marcas",
+      "item": [
+        {
+          "name": "Listar Marcas",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}?path=marcas",
+              "host": ["{{base_url}}"],
+              "query": [
+                {
+                  "key": "path",
+                  "value": "marcas"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear Marca",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Token",
+                "value": "{{token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "nombre",
+                  "value": "Nueva Marca",
+                  "type": "text"
+                },
+                {
+                  "key": "descripcion",
+                  "value": "Descripción de la nueva marca",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}?path=marcas",
+              "host": ["{{base_url}}"],
+              "query": [
+                {
+                  "key": "path",
+                  "value": "marcas"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "⚙️ Sistema",
+      "item": [
+        {
+          "name": "Estado de la API",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}?path=status",
+              "host": ["{{base_url}}"],
+              "query": [
+                {
+                  "key": "path",
+                  "value": "status"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Test Endpoint",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}?path=test",
+              "host": ["{{base_url}}"],
+              "query": [
+                {
+                  "key": "path",
+                  "value": "test"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
