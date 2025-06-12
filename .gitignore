@@ -1,5 +1,9 @@
-# Variables de entorno
+# Variables de entorno - NUNCA subir a GitHub
 .env
+# Archivos con información sensible
+*.pem
+*.key
+*_rsa
 
 # Archivos subidos por usuarios
 uploads/*

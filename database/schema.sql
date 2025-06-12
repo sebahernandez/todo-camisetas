@@ -64,9 +64,10 @@ CREATE INDEX idx_camisetas_activo ON camisetas(activo);
 
 -- Datos de ejemplo
 
--- Insertar usuario administrador (password: admin123)
-INSERT INTO usuarios (email, password, nombre, rol) VALUES 
-('admin@todocamisetas.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Administrador', 'admin');
+-- NOTA: Debes crear un usuario administrador manualmente
+-- Ejemplo de sentencia (reemplazar con un hash de contraseña seguro):
+-- INSERT INTO usuarios (email, password, nombre, rol) VALUES 
+-- ('admin@example.com', 'HASH_PASSWORD_SEGURO', 'Administrador', 'admin');
 
 -- Insertar categorías
 INSERT INTO categorias (nombre, descripcion) VALUES 

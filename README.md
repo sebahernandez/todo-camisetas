@@ -26,6 +26,9 @@
    # Editar .env con tus credenciales de BD
    ```
 
+   > ⚠️ **Seguridad**: El archivo `.env` contiene credenciales y está excluido del control de versiones.
+   > Nunca subas este archivo a GitHub o expongas sus valores en el código.
+
 3. **Iniciar MAMP:** Apache y MySQL
 
 ### 🌐 URLs de Acceso
@@ -469,6 +472,35 @@ todo-camisetas/
 ### Base de datos no conecta
 
 ➡️ Verificar credenciales en `.env`
+
+## 🔒 Seguridad
+
+### Credenciales y Variables Sensibles
+
+- **Archivo `.env`**: Contiene todas las credenciales y nunca debe subirse a repositorios. Está incluido en `.gitignore`.
+- **JWT Secret**: Genera un valor aleatorio y seguro en el archivo `.env`.
+- **Contraseñas**: Los hashes de contraseñas nunca deben estar hardcodeados en el código fuente.
+
+### Configuración Para Producción
+
+Antes de desplegar en producción:
+
+1. **Generar un JWT Secret fuerte**: Mínimo 32 caracteres aleatorios.
+2. **Crear usuarios manualmente**: No usar usuarios por defecto.
+3. **Definir `PRODUCTION=true`**: Activa las protecciones adicionales.
+4. **Contraseñas de BD**: Usar usuarios de BD con privilegios limitados.
+5. **HTTPS**: Configurar siempre conexiones seguras.
+
+### Usuario Administrador
+
+```sql
+-- Ejecutar después de importar schema.sql para crear un usuario admin
+INSERT INTO usuarios (email, password, nombre, rol) VALUES
+('tu_email@ejemplo.com', 'HASH_DE_PASSWORD_SEGURO', 'Administrador', 'admin');
+
+-- Para generar el hash seguro desde PHP:
+-- $hash = password_hash("ContraseñaSegura123", PASSWORD_DEFAULT);
+```
 
 ---
 
